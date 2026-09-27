@@ -15,10 +15,27 @@
 
 </div>
 
+**In one sentence:** a small Python server ([`proxy/server.py`](proxy/server.py)) runs open AI models on your Mac's chip with Apple's MLX and answers Claude Code in Anthropic's own API format, so Claude Code works with no cloud model and no API key.
+
 <p align="center">
   <img src="assets/demo.gif" width="860" alt="Claude Code editing a file with Gemma 4 31B running locally on a Mac, no cloud">
   <br><em>A real session, unedited. Claude Code reads and edits the file, and the AI answering is running on the laptop.</em>
 </p>
+
+---
+
+## 🛠️ What I built
+
+Matt Macosko wrote the glue that makes local models usable inside Claude Code. The pieces in this repo:
+
+- ⚡ **[`proxy/server.py`](proxy/server.py)**: the MLX server. Speaks the Anthropic Messages API with streaming, turns each model's own tool-call format (Gemma 4, Qwen, Llama JSON) into Claude Code tool calls, repairs garbled tool JSON, and reuses the prompt cache between turns so long sessions don't re-read everything.
+- 🧪 **[`scripts/test_parse_tool_calls.py`](scripts/test_parse_tool_calls.py)** and **[`scripts/test_mlx_server.py`](scripts/test_mlx_server.py)**: tests for the tool-call parser (no model needed) and for multi-step tool calls against a running server.
+- 🏎️ **[`agent/agent.py`](agent/agent.py)**: the Native Engine, a one-file terminal coding agent with a short fixed system prompt so the cache survives every turn. [`bench/agent_bench.py`](bench/agent_bench.py) reproduces its cache numbers.
+- 🔋 **[`bin/keepgoing`](bin/keepgoing)** + [`bin/keepgoing.py`](bin/keepgoing.py): finds your last Claude Code conversation in this folder and resumes it on a free cloud or local model.
+- 🚀 **[`install.sh`](install.sh)**, **[`setup.sh`](setup.sh)** and **[`scripts/doctor.sh`](scripts/doctor.sh)**: check the Mac, pick a model that fits its memory, install everything and make a Desktop launcher.
+- 🎮 **[`launchers/`](launchers/)** with the shared [`launchers/lib/claude-local-common.sh`](launchers/lib/claude-local-common.sh): the double-click modes below.
+
+**Upstream, not mine:** [Claude Code](https://github.com/anthropics/claude-code) (Anthropic), [MLX and mlx-lm](https://github.com/ml-explore/mlx-lm) (Apple), and the models themselves (Google, Qwen, Nous Research and the others credited [below](#-good-builds-from-other-people)). Contributors who fixed things are named at the bottom.
 
 ---
 
@@ -110,7 +127,7 @@ Setup looks at your Mac's memory and picks a model that fits:
 
 | Your Mac's memory | The model you get |
 |---|---|
-| **8 GB** | Gemma 4 E4B. It loads and chats, but in our Claude Code test it claimed to run a file it never wrote, so expect tool trouble |
+| **Under 16 GB** (8 GB) | Gemma 4 E4B. It loads and chats, but in our Claude Code test it claimed to run a file it never wrote, so expect tool trouble |
 | **16 GB** (MacBook Air, base models) | 🟡 Hermes 4 14B, confirmed on a 16 GB Mac by a user ([#54](https://github.com/nicedreamzapp/claude-code-local/issues/54)) |
 | **32–63 GB** (Pro) | 🟢 Gemma 4 12B |
 | **64–95 GB** (Max) | 🟢 Gemma 4 31B |
@@ -151,8 +168,9 @@ python3.12 -m venv ~/.local/mlx-server
 # 2. Pick a model and download it (one time)
 bash scripts/download-and-import.sh gemma   # or 'qwen', 'gemma12', 'hermes'
 
-# 3. Start the server
+# 3. Start the server (MLX_SERVER points at the repo copy, since setup.sh didn't install one)
 MLX_MODEL=divinetribe/gemma-4-31b-it-abliterated-4bit-mlx \
+MLX_SERVER="$PWD/proxy/server.py" \
   bash scripts/start-mlx-server.sh
 
 # 4. Launch Claude Code against it
@@ -208,15 +226,15 @@ made them.
 
 ## 🎮 Ways to use it
 
-Each one is a double-click launcher in [`launchers/`](launchers/).
+Code and Native Engine need only what setup installs (a launcher for a model you don't have yet downloads it on first launch). The other three need one extra piece that `setup.sh` does not install, named in each row.
 
 | | Mode | What it does |
 |---|---|---|
 | 🤖 | **Code** | Claude Code with a local model: `Claude Local`, `Gemma 4 Code`, `Qwen 3.8 Code` |
 | ⚡ | **Native Engine** | Our own lightweight agent for the fastest replies: the `(Native Engine)` launchers |
-| 🌐 | **Browser** | The local AI drives your real browser: `Browser Agent` ([guide](docs/BROWSER-AGENT.md)) |
-| 🎤 | **Hands-free voice** | Talk to it and hear it answer in your own voice: `Narrative Gemma` ([guide](docs/VOICE-MODE.md)) |
-| 📱 | **Phone** | Text your Mac from your iPhone and get answers back ([guide](docs/PHONE-CONTROL.md)) |
+| 🌐 | **Browser** | The local AI drives your real Brave browser: `Browser Agent` ([guide](docs/BROWSER-AGENT.md)). Needs [browser-agent](https://github.com/nicedreamzapp/browser-agent) installed |
+| 🎤 | **Hands-free voice** | Talk to it and hear it answer in your own voice: `Narrative Gemma` ([guide](docs/VOICE-MODE.md)). Needs a `speak` command (macOS `say` works as a stand-in) |
+| 📱 | **Phone** | Text your Mac from your iPhone and get answers back ([guide](docs/PHONE-CONTROL.md)). No launcher here: the iMessage scripts live in [claude-screen-to-phone](https://github.com/nicedreamzapp/claude-screen-to-phone) |
 
 ---
 
