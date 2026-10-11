@@ -6,6 +6,8 @@
 
 **Your Mac's chip runs the AI · Claude Code works exactly like it always does · nothing leaves your computer**
 
+<a href="https://github.com/hesreallyhim/awesome-claude-code"><img src="https://img.shields.io/badge/Mentioned_in-Awesome_Claude_Code-fc60a8?style=for-the-badge&logo=awesomelists&logoColor=white&labelColor=1f2328" alt="Mentioned in Awesome Claude Code"></a>
+
 <a href="https://github.com/nicedreamzapp/claude-code-local/stargazers"><img src="https://img.shields.io/github/stars/nicedreamzapp/claude-code-local?style=for-the-badge&logo=github&color=f5c542&labelColor=1f2328" alt="GitHub stars"></a>
 <a href="#-what-you-need"><img src="https://img.shields.io/badge/Mac-Apple_Silicon-111111?style=for-the-badge&logo=apple&logoColor=white" alt="Apple Silicon"></a>
 <a href="#-your-code-stays-home"><img src="https://img.shields.io/badge/🔒_Privacy-100%25_Local-success?style=for-the-badge" alt="100% Local"></a>
