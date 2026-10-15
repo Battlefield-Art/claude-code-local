@@ -1,6 +1,6 @@
 # 📱 Apps From The Same Workshop
 
-Same one-person shop, shipped to phones. No subscriptions, no accounts, nothing tracked — and **all four are live on the App Store and Google Play**.
+Same builder, shipped to phones. No subscriptions, no accounts, nothing tracked — and **all four are live on the App Store and Google Play**.
 
 | App | What it does | Get it |
 |---|---|---|
