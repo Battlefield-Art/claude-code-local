@@ -285,11 +285,12 @@ def clean_response(text):
     text = strip_think_tags(text)
     # Llama 3.x: strip function-call prefix token
     text = text.replace('<|python_tag|>', '').strip()
-    # Gemma 4 + Qwen + ChatML: truncate at end-of-turn or start of a new turn
-    for stop_marker in ['<turn|>', '<|turn>', '<|im_end|>', '<|endoftext|>', '<|im_start|>', '<|end_of_text|>', '<|eot_id|>']:
-        if stop_marker in text:
-            text = text[:text.index(stop_marker)].strip()
-            break
+    # Gemma 4 + Qwen + ChatML: truncate at end-of-turn or start of a new turn,
+    # whichever marker comes first (the live stream cuts the same way).
+    cuts = [text.index(m) for m in ['<turn|>', '<|turn>', '<|im_end|>', '<|endoftext|>',
+                                    '<|im_start|>', '<|end_of_text|>', '<|eot_id|>'] if m in text]
+    if cuts:
+        text = text[:min(cuts)].strip()
 
     # Remove reasoning preamble if present
     if text.lstrip().startswith("Thinking"):
@@ -495,7 +496,9 @@ def parse_tool_calls(text):
         for match in gemma4_matches:
             remaining = remaining.replace(match.group(0), "", 1)
             content = match.group(1).strip()
-            name_m = re.match(r'(?:call:)?([\w.]+)\s*\{(.*)\}', content, re.DOTALL)
+            # [\w.-]: MCP tool names carry the server name, which often has a
+            # dash (mcp__chrome-devtools__click), same as Formats 1 and 2 allow.
+            name_m = re.match(r'(?:call:)?([\w.-]+)\s*\{(.*)\}', content, re.DOTALL)
             if not name_m:
                 log(f"  Gemma4 no name match: {content[:80]}")
                 continue
@@ -504,6 +507,9 @@ def parse_tool_calls(text):
             # Primary: read the whole argument list as Gemma's JSON dialect, which
             # covers nested arrays/objects and keys like -i that the regexes miss.
             arguments = _gemma4_args(args_str)
+            # call:list_pages{} parses to {}: a real call with no arguments,
+            # not a failed parse, so it has to go out as one.
+            no_args_call = arguments == {}
             if arguments is None:
                 arguments = {}
                 # Fallback: extract key:<|"|>value<|"|> pairs (handles embedded quotes)
@@ -525,7 +531,7 @@ def parse_tool_calls(text):
                     for km in re.finditer(r'(\w+):([^,}]+)', args_str):
                         val = km.group(2).strip().strip('"\'')
                         arguments[km.group(1)] = val
-            if arguments:
+            if arguments or no_args_call:
                 tool_calls.append({"name": name, "arguments": arguments})
                 log(f"  Gemma4 tool call: {name}({list(arguments.keys())})")
             else:
@@ -1713,7 +1719,12 @@ def send_anthropic_stream_live(handler, body):
 
     try:
         if not state["done"]:
+            # The think filter holds back its last few chars until flush, so a
+            # stop marker at the very end of the output only shows up here.
             state["buf"] += think.flush()
+            cuts = [state["buf"].find(m) for m in STOP_MARKERS if m in state["buf"]]
+            if cuts:
+                state["buf"] = state["buf"][:min(cuts)]
         if state["first"] is None and not state["buf"].strip():
             # Nothing got past the filter: a <think> block that never closed
             # (the model hit max_tokens mid-thought) or one with nothing after
