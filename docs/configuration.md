@@ -200,6 +200,8 @@ Settings can also live in `~/.config/claude-code-local/keepgoing.env`, which is 
 - **Free cloud list:** up to three OpenRouter models whose ID ends in `:free`, that support tools and have at least 128,000 tokens of context, largest context first. Claude Code is pointed at `https://openrouter.ai/api` with `ANTHROPIC_AUTH_TOKEN` set to your key.
 - **Local list:** the model already running on the port (if any), then the five `setup.sh` models whose memory requirement (8, 16, 32, 64, 96 GB) your Mac meets. Choosing one kills whatever is on the port, starts the server and waits up to 20 minutes for it. The local path sets the four offline env vars.
 
+`keepgoing --auto` skips the menu: the first free cloud model if you have a key, else the model already running on the port, else the biggest lineup model that fits your memory. The `StopFailure` hook in `scripts/limit-handoff.py` runs it for you when you hit a usage limit; see [Automatic keep going](AUTO-HANDOFF.md).
+
 To get the reminder in Claude Code's status line, point `statusLine` in `~/.claude/settings.json` at `bash ~/claude-code-local/scripts/statusline-keepgoing.sh`.
 
 ## Helper scripts

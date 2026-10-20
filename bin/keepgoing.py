@@ -8,6 +8,10 @@ can continue it with right now:
   * THIS MAC    — models from the Claude Code Local lineup that fit your RAM, served by this repo's
                   MLX server on port 4000
 
+With --auto there is no menu: it takes the first free cloud model if you have a key, else the model
+already running on this Mac, else the biggest lineup model that fits your RAM. That is what the
+Claude Code hook in scripts/limit-handoff.py runs when you hit a usage limit.
+
 The choice is printed for bin/keepgoing as one tab-separated line:
   <session_id> <kind: cloud|local> <model> <already_running: 0|1>
 Everything meant for you goes to stderr.
@@ -114,7 +118,20 @@ def ago(seconds):
     return f"{int(seconds / 86400)}d ago"
 
 
-def main():
+def auto_pick(cloud, live, ram):
+    """The --auto choice as (kind, model, already_running), or None if there is nothing to use."""
+    if cloud:
+        return ("cloud", cloud[0], 0)
+    if live:
+        return ("local", live, 1)  # already loaded: instant, and nothing else gets swapped out
+    fits = [m for m, _, need in LOCAL if ram and ram >= need]
+    if fits:
+        return ("local", fits[-1], 0)  # LOCAL is smallest first
+    return ("local", LOCAL[0][0], 0) if LOCAL else None  # RAM unknown: the smallest is the safe bet
+
+
+def main(argv=None):
+    auto = "--auto" in (sys.argv[1:] if argv is None else argv)
     cwd = os.getcwd()
     session = find_session(cwd)
     if not session:
@@ -126,6 +143,19 @@ def main():
 
     say(f"\n{C['cyn']}{C['b']}  Picking up your conversation in {os.path.basename(cwd)}{C['off']}")
     say(f"{C['dim']}  {turns} messages · last active {ago(time.time() - mtime)}{C['off']}\n")
+
+    if auto:
+        key = os.environ.get("OPENROUTER_API_KEY", "")
+        pick = auto_pick(free_cloud_models(key, limit=1), running_local_model(), mac_ram_gb())
+        if not pick:
+            say(f"{C['red']}  Nothing to keep going with.{C['off']}")
+            sys.exit(1)
+        kind, model, already = pick
+        where = "free cloud" if kind == "cloud" else "already running" if already else "this Mac"
+        say(f"{C['b']}  Keeping going automatically with {model}{C['off']} {C['dim']}({where}){C['off']}")
+        print("\t".join([sid, kind, model, str(already)]))
+        return
+
     say(f"{C['b']}  Pick a model to keep going with:{C['off']}\n")
 
     options = []

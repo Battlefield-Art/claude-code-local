@@ -102,6 +102,10 @@ Want a reminder at the bottom of every Claude window? Point your status line at
 `scripts/statusline-keepgoing.sh`. It says *"💡 Out of Claude credits? Type exit, then keep going to
 carry on with a free or local model."*
 
+It can also happen automatically. Add one hook to Claude Code and, the moment you hit your usage
+limit, a new window opens in the same folder and carries on without a menu, free cloud model first,
+then one on your Mac. Setup and limits are in [Automatic keep going](docs/AUTO-HANDOFF.md).
+
 > 💡 Free cloud models can get busy later in the day. The models on your Mac are always there.
 
 ---
@@ -296,6 +300,7 @@ CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1
 | 📖 **[Full technical guide](docs/FULL-GUIDE.md)** | Every model table, benchmark, tuning setting and design note |
 | 📊 [Benchmarks](docs/BENCHMARKS.md) · 🔧 [Tool-call reliability](docs/TOOL-CALL-RELIABILITY.md) | The numbers and how they were measured |
 | 🎤 [Voice mode](docs/VOICE-MODE.md) · 🌐 [Browser agent](docs/BROWSER-AGENT.md) · 📱 [Phone control](docs/PHONE-CONTROL.md) · 🔌 [MCP servers](docs/MCP-SERVERS.md) | Everything the launchers can do |
+| 🔋 [Automatic keep going](docs/AUTO-HANDOFF.md) | Hand a conversation to a free or local model by itself when you hit a usage limit |
 | 📁 [What's in this repo](docs/REPO-LAYOUT.md) · 🙏 [Credits](docs/CREDITS.md) | The tour and the thank-yous |
 
 ---

@@ -150,6 +150,19 @@ if ! grep -qF "$KEEP_LINE" "$ZSHRC" 2>/dev/null; then
   printf '\n# Claude Code Local: type "keep going" when Claude runs out of credits\n%s\n' "$KEEP_LINE" >> "$ZSHRC"
 fi
 echo "keep going installed → ~/.local/bin/keepgoing (open a new terminal to use it)"
+# Optional: run keep going by itself when Claude hits a usage limit. setup.sh never edits
+# ~/.claude/settings.json, so it only prints the snippet (docs/AUTO-HANDOFF.md explains it).
+echo ""
+echo "Want keep going to start by itself when you hit a Claude usage limit? Add this to"
+echo "~/.claude/settings.json (merge it into an existing \"hooks\" block if you have one):"
+cat <<HOOK
+  "hooks": {
+    "StopFailure": [
+      { "matcher": "rate_limit",
+        "hooks": [ { "type": "command", "command": "python3 $SCRIPT_DIR/scripts/limit-handoff.py" } ] }
+    ]
+  }
+HOOK
 
 # ── Optional: iMessage / Screen-to-Phone tools ────────────────
 echo ""

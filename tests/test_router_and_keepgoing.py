@@ -194,3 +194,67 @@ def test_main_without_a_session_exits_1(tmp_path, monkeypatch):
     with pytest.raises(SystemExit) as e:
         keepgoing.main()
     assert e.value.code == 1
+
+
+# ─── keepgoing --auto ────────────────────────────────────────────────────────
+
+def test_auto_pick_order():
+    assert keepgoing.auto_pick(["a:free", "b:free"], "my/model", 128) == ("cloud", "a:free", 0)
+    assert keepgoing.auto_pick([], "my/model", 128) == ("local", "my/model", 1)
+    assert keepgoing.auto_pick([], None, 40) == \
+        ("local", "divinetribe/gemma-4-12B-it-abliterated-4bit-mlx-text", 0)
+    assert keepgoing.auto_pick([], None, 128) == ("local", "lmstudio-community/Qwen3.8-27B-MLX-8bit", 0)
+    assert keepgoing.auto_pick([], None, 0) == ("local", keepgoing.LOCAL[0][0], 0)
+
+
+def auto_setup(tmp_path, monkeypatch, key, cloud, live, ram):
+    monkeypatch.setattr(keepgoing, "PROJECTS", str(tmp_path))
+    write_session(tmp_path, "s", str(tmp_path), 2)
+    monkeypatch.chdir(tmp_path)
+    if key:
+        monkeypatch.setenv("OPENROUTER_API_KEY", key)
+    else:
+        monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
+    seen = {}
+
+    def fake_cloud(k, limit=3):
+        seen["key"] = k
+        return cloud if k else []
+    monkeypatch.setattr(keepgoing, "free_cloud_models", fake_cloud)
+    monkeypatch.setattr(keepgoing, "running_local_model", lambda: live)
+    monkeypatch.setattr(keepgoing, "mac_ram_gb", lambda: ram)
+
+    def no_menu():
+        raise AssertionError("--auto must not ask")
+    monkeypatch.setattr("builtins.input", no_menu)
+    return seen
+
+
+def test_main_auto_with_key_goes_cloud_first(tmp_path, monkeypatch, capsys):
+    seen = auto_setup(tmp_path, monkeypatch, "k", ["big:free"], "my/model", 64)
+    keepgoing.main(["--auto"])
+    assert capsys.readouterr().out == "s\tcloud\tbig:free\t0\n"
+    assert seen["key"] == "k"
+
+
+def test_main_auto_without_key_goes_local(tmp_path, monkeypatch, capsys):
+    auto_setup(tmp_path, monkeypatch, "", ["big:free"], None, 16)
+    keepgoing.main(["--auto"])
+    out = capsys.readouterr()
+    assert out.out == "s\tlocal\tdivinetribe/Hermes-4-14B-abliterated-4bit-mlx\t0\n"
+    assert "Pick a model" not in out.err
+
+
+def test_main_auto_key_but_cloud_down_uses_running_model(tmp_path, monkeypatch, capsys):
+    auto_setup(tmp_path, monkeypatch, "k", [], "my/model", 64)
+    keepgoing.main(["--auto"])
+    assert capsys.readouterr().out == "s\tlocal\tmy/model\t1\n"
+
+
+def test_main_without_auto_still_shows_the_menu(tmp_path, monkeypatch, capsys):
+    auto_setup(tmp_path, monkeypatch, "", [], None, 16)
+    monkeypatch.setattr("builtins.input", lambda: "1")
+    keepgoing.main([])
+    out = capsys.readouterr()
+    assert "Pick a model" in out.err
+    assert out.out == "s\tlocal\tmlx-community/gemma-4-e4b-it-4bit\t0\n"

@@ -29,6 +29,7 @@ Built from the git history and the three tags in the repository. Pull request nu
 
 ### Features and models
 
+- Automatic keep going: `keepgoing --auto` and a `StopFailure` hook (`scripts/limit-handoff.py`) that hands the conversation to a free or local model when Claude Code hits a usage limit (2026-10-20).
 - `keep going`: resume the current folder's Claude Code conversation on a free OpenRouter model or a local one, plus an optional status line reminder (2026-09-17).
 - Model lineup refresh: Qwen 3.8 27B (8-bit) for 96 GB Macs and Gemma 4 for 32 and 64 GB, older models retired (2026-09-19).
 - `bin/` helpers added (`fia`, `keepgoing`) (2026-09-07).
