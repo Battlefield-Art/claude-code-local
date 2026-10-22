@@ -27,9 +27,8 @@ Other things I built that go with it are in [the local-first family](#-the-local
   <br><em>A real session, unedited. Claude Code reads and edits the file, and the AI answering is running on the laptop.</em>
 </p>
 
----
-
-## 🛠️ What I built
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s01-banner-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s01-banner-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s01-banner.svg" width="100%" alt="01. What I built. The glue that makes local models usable inside Claude Code"></picture>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s01-r1-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s01-r1-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s01-r1.svg" width="100%" alt="The MLX server. Speaks the Anthropic Messages API with streaming and repairs garbled tool JSON. The Native Engine. A one-file terminal coding agent with a short fixed system prompt. keepgoing. Resumes your last Claude Code conversation on a free cloud or local model."></picture>
 
 Matt Macosko wrote the glue that makes local models usable inside Claude Code. The pieces in this repo:
 
@@ -42,9 +41,12 @@ Matt Macosko wrote the glue that makes local models usable inside Claude Code. T
 
 **Upstream, not mine:** [Claude Code](https://github.com/anthropics/claude-code) (Anthropic), [MLX and mlx-lm](https://github.com/ml-explore/mlx-lm) (Apple), and the models themselves (Google, Qwen, Nous Research and the others credited [below](#-good-builds-from-other-people)). Contributors who fixed things are named at the bottom.
 
----
+<img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s01-rule.svg" width="100%" alt="">
 
-## 🛑 Hit your Claude usage limit?
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s02-banner-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s02-banner-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s02-banner.svg" width="100%" alt="02. Hit your usage limit?. Keep working on your own Mac"></picture>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s02-r1-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s02-r1-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s02-r1.svg" width="100%" alt="One command. Run the install script and keep working in the same project. Works on 16 GB. It even works on a 16 GB MacBook. keep going. Type exit, then keep going. The same conversation carries on."></picture>
+
+### 🛑 Hit your Claude usage limit?
 
 Claude Code just said **"you've reached your usage limit"** and the reset is hours away? Keep working:
 same Claude Code, same project, but the AI answering runs on your own Mac.
@@ -57,28 +59,7 @@ That's it. It even works on a **16 GB MacBook**, and gets better the more memory
 
 Once it's running, [the local-first family](#-the-local-first-family) takes it off the keyboard: your browser, your voice, your phone, all on the same machine.
 
----
-
-## 🌊 Use it with Trinidad Head
-
-**Trinidad Head is the recommended terminal for running local models, on Mac and PC.** It's built
-from scratch by the same person who made this project, and it makes long local-AI sessions nicer:
-
-- 🪟 **Glass windows with a soft neon glow**, rounded and easy on the eyes
-- 🌈 **A different color for every window**, so you can tell your local-model windows apart at a glance
-- 🔠 **Bigger, easy-to-read text**
-- 💬 **Your own prompts stand out** in a soft bubble, so you can find what you asked when you scroll back
-- 🖱️ **Copy and paste just work**, even under Claude Code's calm focus view
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/nicedreamzapp/trinidad-head/main/docs/images/colors.jpg" width="860" alt="Three Trinidad Head windows, each glowing a different color">
-</p>
-
-👉 **[Get Trinidad Head](https://github.com/nicedreamzapp/trinidad-head)** · [project page](https://nicedreamzwholesale.com/software/trinidad-head/)
-
----
-
-## 🔋 Out of Claude credits? Keep going.
+### 🔋 Out of Claude credits? Keep going.
 
 When Claude runs out, type **`exit`** in Claude Code, then **`keep going`**. You get a short menu,
 and **the same conversation carries on** with whichever model you pick:
@@ -108,9 +89,12 @@ then one on your Mac. Setup and limits are in [Automatic keep going](docs/AUTO-H
 
 > 💡 Free cloud models can get busy later in the day. The models on your Mac are always there.
 
----
+<img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s02-rule.svg" width="100%" alt="">
 
-## 🤔 What is this, really?
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s03-banner-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s03-banner-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s03-banner.svg" width="100%" alt="03. Get started. What it is, what you need, how to install"></picture>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s03-r1-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s03-r1-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s03-r1.svg" width="100%" alt="Nothing in the middle. The server speaks Claude Code&#x27;s language directly. Setup picks the model. It looks at your Mac&#x27;s memory and picks one that fits. Apple Silicon. A Mac with M1 or newer."></picture>
+
+### 🤔 What is this, really?
 
 Your Mac has a powerful graphics chip built in. This project uses it to run **big AI models right on
 your computer** and plugs them into Claude Code, so the whole coding experience works offline:
@@ -124,9 +108,7 @@ Claude Code's language directly, so there's **nothing in the middle**, and that'
 📝 You  ──▶  🤖 Claude Code  ──▶  ⚡ this server (on your Mac)  ──▶  🧠 local model  ──▶  🖥️ your Mac's chip
 ```
 
----
-
-## 💻 What you need
+### 💻 What you need
 
 - 🍎 A Mac with **Apple Silicon** (M1 or newer)
 - 🐍 **Python 3.12** (setup installs it for you)
@@ -142,9 +124,7 @@ Setup looks at your Mac's memory and picks a model that fits:
 | **64–95 GB** (Max) | 🟢 Gemma 4 31B |
 | **96 GB and up** (Max, Ultra) | 🟣 Qwen 3.8 27B, 8-bit. Passed our Claude Code test (write a file, run it, report) in 38 s |
 
----
-
-## 🚀 Get started
+### 🚀 Get started
 
 **One command:**
 
@@ -193,9 +173,10 @@ it, just restart the server.
 
 </details>
 
----
+<img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s03-rule.svg" width="100%" alt="">
 
-## 🥊 Pick your AI
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s04-banner-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s04-banner-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s04-banner.svg" width="100%" alt="04. Pick your AI. Same server, same Claude Code, swap the brain"></picture>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s04-r1-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s04-r1-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s04-r1.svg" width="100%" alt="Qwen 3.8 27B. Careful coding and pictures, 96 GB Macs. Gemma 4 31B. Daily coding and the browser agent. Hermes 4 14B. 16 GB MacBooks."></picture>
 
 Same server, same Claude Code. Swap one setting and you swap the brain. Links to every build are just below the table.
 
@@ -231,9 +212,7 @@ made them.
 > ⚠️ **"Abliterated"** models have their built-in refusals turned down. That's not a general upgrade,
 > and each model's own license still applies. Please use them responsibly.
 
----
-
-## 🎮 Ways to use it
+### 🎮 Ways to use it
 
 Code and Native Engine need only what setup installs (a launcher for a model you don't have yet downloads it on first launch). The other three need one extra piece that `setup.sh` does not install, named in each row.
 
@@ -245,9 +224,29 @@ Code and Native Engine need only what setup installs (a launcher for a model you
 | 🎤 | **Hands-free voice** | Talk to it and hear it answer in your own voice: `Narrative Gemma` ([guide](docs/VOICE-MODE.md)). Needs a `speak` command (macOS `say` works as a stand-in) |
 | 📱 | **Phone** | Text your Mac from your iPhone and get answers back ([guide](docs/PHONE-CONTROL.md)). No launcher here: the iMessage scripts live in [claude-screen-to-phone](https://github.com/nicedreamzapp/claude-screen-to-phone) |
 
----
+<img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s04-rule.svg" width="100%" alt="">
 
-## 🧩 The local-first family
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s05-banner-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s05-banner-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s05-banner.svg" width="100%" alt="05. The local-first family. Each one works on its own"></picture>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s05-r1-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s05-r1-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s05-r1.svg" width="100%" alt="Trinidad Head. The recommended terminal for local models, on Mac and PC. NarrateClaude. A hands-free voice loop for Claude Code on macOS. browser-agent. Plain-English tasks carried out in your real Brave browser."></picture>
+
+### 🌊 Use it with Trinidad Head
+
+**Trinidad Head is the recommended terminal for running local models, on Mac and PC.** It's built
+from scratch by the same person who made this project, and it makes long local-AI sessions nicer:
+
+- 🪟 **Glass windows with a soft neon glow**, rounded and easy on the eyes
+- 🌈 **A different color for every window**, so you can tell your local-model windows apart at a glance
+- 🔠 **Bigger, easy-to-read text**
+- 💬 **Your own prompts stand out** in a soft bubble, so you can find what you asked when you scroll back
+- 🖱️ **Copy and paste just work**, even under Claude Code's calm focus view
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/nicedreamzapp/trinidad-head/main/docs/images/colors.jpg" width="860" alt="Three Trinidad Head windows, each glowing a different color">
+</p>
+
+👉 **[Get Trinidad Head](https://github.com/nicedreamzapp/trinidad-head)** · [project page](https://nicedreamzwholesale.com/software/trinidad-head/)
+
+### 🧩 The local-first family
 
 The modes above aren't bolted on. Each one is its own repo that works on its own, and they all run
 on your hardware. If Claude Code on your own Mac was the part you wanted, this is the rest of it.
@@ -267,9 +266,12 @@ on your hardware. If Claude Code on your own Mac was the part you wanted, this i
 | 🎬 | [story-forge](https://github.com/nicedreamzapp/story-forge) | A pipeline that turns a written story into a finished video on an Apple Silicon Mac, with local models making the stills, motion, voices and music |
 | 📷 | [RealTimeAICam](https://github.com/nicedreamzapp/RealTimeAICam) | A free iPhone and Android app that names objects, reads text and describes the scene out loud, with the models running on the phone |
 
----
+<img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s05-rule.svg" width="100%" alt="">
 
-## 🔒 Your code stays home
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s06-banner-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s06-banner-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s06-banner.svg" width="100%" alt="06. Your code stays home. No cloud model, no tracking"></picture>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s06-r1-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s06-r1-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s06-r1.svg" width="100%" alt="Nothing leaves. Your code never leaves your Mac. localhost:4000. The only network connection of the Claude processes. LiteLLM removed. Removed after supply-chain concerns; every dependency re-checked."></picture>
+
+### 🔒 Your code stays home
 
 **Your code never leaves your Mac.** No cloud model, no tracking, no "anonymous analytics".
 
@@ -291,9 +293,12 @@ CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1
 > ☁️ The one exception is your own choice: picking a **free cloud** model in `keep going` sends that
 > conversation to OpenRouter.
 
----
+<img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s06-rule.svg" width="100%" alt="">
 
-## 📚 Want the details?
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s07-banner-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s07-banner-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s07-banner.svg" width="100%" alt="07. Details, other options and thanks. Docs, alternatives, contributors"></picture>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s07-r1-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s07-r1-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s07-r1.svg" width="100%" alt="Full guide. Every model table, benchmark, tuning setting and design note. Other ways. Ollama, claude-code-router and claude-code-proxy. Contributors. Eight people fixed things; they are named below."></picture>
+
+### 📚 Want the details?
 
 | | |
 |---|---|
@@ -303,9 +308,7 @@ CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1
 | 🔋 [Automatic keep going](docs/AUTO-HANDOFF.md) | Hand a conversation to a free or local model by itself when you hit a usage limit |
 | 📁 [What's in this repo](docs/REPO-LAYOUT.md) · 🙏 [Credits](docs/CREDITS.md) | The tour and the thank-yous |
 
----
-
-## 🧭 Other ways to do this
+### 🧭 Other ways to do this
 
 This isn't the only way to run Claude Code against models you choose, and some of these may fit you better:
 
@@ -315,9 +318,7 @@ This isn't the only way to run Claude Code against models you choose, and some o
 
 What this repo adds is an MLX-native server tuned for Apple Silicon and for the tool-call formats local models actually emit.
 
----
-
-## 🤝 Help make it better
+### 🤝 Help make it better
 
 Ideas, bug reports, a launcher for a model we don't run: open an
 [issue](https://github.com/nicedreamzapp/claude-code-local/issues/new) or a PR, every one gets read.
@@ -331,7 +332,19 @@ We especially love hearing from people on older or smaller Macs about which mode
 [@zwolf25](https://github.com/zwolf25). What each of them fixed is in
 the [full guide](docs/FULL-GUIDE.md#-credits).
 
----
+
+<div align="center">
+
+Built by **[Matt Macosko](https://x.com/NiceDreamzApps)** in Humboldt, California.
+**Open to work** on local AI and Apple Silicon: matt@ineedhemp.com
+
+[Nice Dreamz software](https://nicedreamzwholesale.com/software/) · [YouTube demos](https://www.youtube.com/@nicedreamzapps) · [Discord](https://discord.gg/ZdSqgAxUW)
+
+📜 **MIT License**, use it however you want. ⭐ **Star the repo if it helped you!**
+
+</div>
+
+<img src="https://raw.githubusercontent.com/nicedreamzapp/claude-code-local/main/assets/readme/s07-rule.svg" width="100%" alt="">
 
 <div align="center">
 
