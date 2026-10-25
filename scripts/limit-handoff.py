@@ -32,9 +32,11 @@ never get in Claude Code's way.
 import hashlib
 import json
 import os
+import re
 import shlex
 import subprocess
 import sys
+import tempfile
 import time
 import urllib.request
 
@@ -110,13 +112,57 @@ def try_moonstone(cwd, conf):
     return ok
 
 
+# The only text ever typed into Terminal is ". <temp file>", and only if that path is made of these
+# characters. See open_terminal for why.
+SAFE_TYPED = re.compile(r"[A-Za-z0-9/._+-]+")
+
+
+def handoff_file(cwd):
+    """Write the cd + keepgoing command to a private temp file and return its path.
+
+    The file is read by the shell as a file, never typed, so any byte in the folder name (quotes,
+    backslashes, newlines, control characters) stays inside shlex.quote's single quotes. The file
+    deletes itself as its first step."""
+    for where in (None, "/tmp"):
+        fd, path = tempfile.mkstemp(prefix="limit-handoff-", suffix=".sh", dir=where)
+        if SAFE_TYPED.fullmatch(path):
+            break
+        os.close(fd)
+        os.unlink(path)
+    else:
+        raise RuntimeError("no temp folder with a plain path")
+    with os.fdopen(fd, "w") as f:
+        f.write(f"rm -f -- {shlex.quote(path)}\n"
+                f"cd -- {shlex.quote(cwd)} && {shlex.quote(KEEPGOING)} --auto\n")
+    return path
+
+
 def open_terminal(cwd):
-    """A new macOS Terminal window in cwd running keepgoing --auto."""
-    cmd = f"cd {shlex.quote(cwd)} && {shlex.quote(KEEPGOING)} --auto"
-    script = cmd.replace("\\", "\\\\").replace('"', '\\"')
-    r = subprocess.run(["osascript", "-e", f'tell application "Terminal" to do script "{script}"',
-                        "-e", 'tell application "Terminal" to activate'],
+    """A new macOS Terminal window in cwd running keepgoing --auto.
+
+    Terminal's `do script` types its text into the new shell. Typing a folder name is unsafe even
+    when it is quoted: control characters in it (Ctrl-U, Ctrl-C) are acted on by the terminal and
+    the line editor before the shell ever sees the quotes. So the folder and the keepgoing path go
+    into a temp file, Terminal only types ". <that file>", and that text reaches AppleScript as an
+    argv item, not spliced into a string literal."""
+    try:
+        path = handoff_file(cwd)
+    except (OSError, RuntimeError) as e:
+        log({"terminal": "no", "err": repr(e)[:200]})
+        return False
+    typed = ". " + path
+    r = subprocess.run(["osascript",
+                        "-e", "on run argv",
+                        "-e", 'tell application "Terminal" to do script (item 1 of argv)',
+                        "-e", 'tell application "Terminal" to activate',
+                        "-e", "end run",
+                        typed],
                        capture_output=True, text=True, timeout=20)
+    if r.returncode != 0:
+        try:
+            os.unlink(path)
+        except OSError:
+            pass
     log({"terminal": "yes" if r.returncode == 0 else "no", "err": (r.stderr or "")[-200:]})
     return r.returncode == 0
 

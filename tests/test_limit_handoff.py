@@ -3,6 +3,7 @@ Network and osascript are mocked; nothing real opens."""
 import io
 import json
 import os
+import subprocess
 import time
 
 import pytest
@@ -10,6 +11,7 @@ import pytest
 from conftest import ROOT, load_module
 
 hook = load_module("limit_handoff", ROOT / "scripts" / "limit-handoff.py")
+REAL_RUN = subprocess.run  # the fixture mocks subprocess.run; the injection tests need a real shell
 
 
 @pytest.fixture
@@ -64,14 +66,80 @@ def test_missing_folder_does_nothing(h, tmp_path):
     assert not h["osascript"]
 
 
+def typed_file(cmd):
+    """The osascript call types ". <file>"; return that file's path."""
+    assert cmd[0] == "osascript"
+    typed = cmd[-1]
+    assert typed.startswith(". ") and hook.SAFE_TYPED.fullmatch(typed[2:])
+    return typed[2:]
+
+
 def test_falls_back_to_terminal_in_the_folder(h):
     assert hook.handle(payload(h["folder"]), {}) == "terminal"
     (cmd,) = h["osascript"]
-    assert cmd[0] == "osascript"
-    script = cmd[2]
-    assert 'tell application "Terminal" to do script' in script
-    assert "cd '" + h["folder"] + "'" in script  # the space in the name is quoted
-    assert script.rstrip('"').endswith("keepgoing --auto")
+    assert 'tell application "Terminal" to do script (item 1 of argv)' in cmd
+    with open(typed_file(cmd)) as f:
+        body = f.read()
+    assert "cd -- '" + h["folder"] + "'" in body  # the space in the name is quoted
+    assert body.rstrip().endswith("keepgoing --auto")
+
+
+# GHSA-mc35-5675-xr88 / GHSA-xqc9-f3vr-p5pp. Folder names that try to break out of the AppleScript
+# literal, the shell quoting, or the terminal's line editing. None may run the sentinel command.
+EVIL_NAMES = [
+    '$(touch {s})',
+    '`touch {s}`',
+    "x'; touch {s}; '",
+    'x"; do shell script "touch {s}"; "',
+    'x\\" & (do shell script "touch {s}") & \\"',
+    'x\\\\"; touch {s}; "',
+    'x\ntouch {s};#',
+    'x\x15touch {s};#',
+    'x\x03touch {s};#',
+]
+
+
+@pytest.mark.parametrize("name", EVIL_NAMES)
+def test_folder_name_cannot_inject_commands(h, tmp_path, monkeypatch, name):
+    sentinel = tmp_path / "pwned-test"
+    folder = tmp_path / name.format(s=sentinel)
+    os.makedirs(folder)
+    monkeypatch.setattr(hook, "KEEPGOING", "true")
+    assert hook.handle(payload(str(folder)), {}) == "terminal"
+    (cmd,) = h["osascript"]
+    for arg in cmd:  # nothing from the folder name reaches osascript or gets typed
+        assert "touch" not in arg
+    path = typed_file(cmd)
+    # Run the file the way the typed ". <file>" would, in a plain shell.
+    r = REAL_RUN(["/bin/sh", "-c", ". " + path + " && pwd"], capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    assert r.stdout.strip() == os.path.realpath(folder) or r.stdout.strip() == str(folder)
+    assert not sentinel.exists()
+    assert not os.path.exists(path)  # the file removed itself
+
+
+def test_install_path_cannot_inject_commands(h, tmp_path, monkeypatch):
+    sentinel = tmp_path / "pwned-test"
+    monkeypatch.setattr(hook, "KEEPGOING", str(tmp_path / f'clone"; $(touch {sentinel}); "' / "keepgoing"))
+    assert hook.handle(payload(h["folder"]), {}) == "terminal"
+    (cmd,) = h["osascript"]
+    assert all("touch" not in arg for arg in cmd)
+    REAL_RUN(["/bin/sh", typed_file(cmd)], capture_output=True)
+    assert not sentinel.exists()
+
+
+def test_failed_terminal_cleans_up_the_file(h, monkeypatch):
+    seen = []
+
+    class Failed:
+        returncode, stderr = 1, "not allowed"
+
+    def run(cmd, **kw):
+        seen.append(typed_file(cmd))
+        return Failed()
+    monkeypatch.setattr(hook.subprocess, "run", run)
+    assert hook.handle(payload(h["folder"]), {}) == "failed"
+    assert not os.path.exists(seen[0])
 
 
 def test_moonstone_request_has_x_dock_and_wins(h, monkeypatch):
